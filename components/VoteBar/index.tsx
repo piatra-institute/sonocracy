@@ -3,7 +3,9 @@ import {
     useState,
 } from 'react';
 
-import Draggable from 'react-draggable';
+import Draggable, {
+    DraggableData,
+} from 'react-draggable';
 
 
 
@@ -27,6 +29,13 @@ export default function VoteBar({
 
     const valueFromPercent = (percent: number) => {
         return percent / 100 * 480;
+    }
+
+    const updateValue = (
+        data: DraggableData,
+    ) => {
+        const percent = Math.ceil(data.x / 480 * 100);
+        setUserValue(percent);
     }
 
 
@@ -56,15 +65,20 @@ export default function VoteBar({
                 nodeRef={nodeRef}
                 axis="x"
                 handle=".votebar-handle"
-                defaultPosition={{x: valueFromPercent(userValue) , y: 0}}
+                defaultPosition={{
+                    x: valueFromPercent(userValue) ,
+                    y: 0,
+                }}
                 bounds={{
                     left: 12,
                     right: 480,
                 }}
                 scale={1}
                 onStop={(_event, data) => {
-                    const percent = Math.ceil(data.x / 480 * 100);
-                    setUserValue(percent);
+                    updateValue(data);
+                }}
+                onDrag={(_event, data) => {
+                    updateValue(data);
                 }}
             >
                 <div
