@@ -141,7 +141,7 @@ export default function Venue({
                         border py-4 px-8 mt-4 rounded-full shadow-xl
                         hover:shadow hover:bg-red-800 disabled:bg-red-800 disabled:opacity-70
                     `}
-                    disabled={false}
+                    disabled={nextSongName.length === 0}
                     onClick={() => {
                     }}
                 >
