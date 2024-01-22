@@ -11,6 +11,8 @@ import {
     SonocracyVenue,
 } from '@/data';
 
+import Menu from '@/components/Menu';
+
 import Splashscreen from '@/containers/Splashscreen';
 import VenueSelector from '@/containers/VenueSelector';
 import Venue from '@/containers/Venue';
@@ -149,21 +151,29 @@ export default function App() {
 
     if (!selectedVenue) {
         return (
-            <VenueSelector
-                venues={venues}
-                setSelectedVenue={setSelectedVenue}
+            <>
+                <VenueSelector
+                    venues={venues}
+                    setSelectedVenue={setSelectedVenue}
 
-                loadingVenues={loadingVenues}
-                loadVenues={loadVenues}
-                setLoadingVenues={setLoadingVenues}
-            />
+                    loadingVenues={loadingVenues}
+                    loadVenues={loadVenues}
+                    setLoadingVenues={setLoadingVenues}
+                />
+
+                <Menu />
+            </>
         );
     }
 
     return (
-        <Venue
-            data={venues.find((venue) => venue.id === selectedVenue)!}
-            back={() => setSelectedVenue('')}
-        />
+        <>
+            <Venue
+                data={venues.find((venue) => venue.id === selectedVenue)!}
+                back={() => setSelectedVenue('')}
+            />
+
+            <Menu />
+        </>
     );
 }
