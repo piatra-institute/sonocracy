@@ -32,6 +32,10 @@ export default function VenueSelector({
                 </div>
 
                 <div>
+                    ensure location is enabled/allowed
+                </div>
+
+                <div>
                     increase range
                 </div>
             </div>
