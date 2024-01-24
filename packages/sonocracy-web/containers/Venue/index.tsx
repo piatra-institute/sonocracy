@@ -9,8 +9,11 @@ import {
 } from '@/data';
 
 import VoteBar from '@/components/VoteBar';
+import Toggle from '@/components/Toggle';
 
 
+
+const VOTE_TIMEOUT = 40; // seconds
 
 export default function Venue({
     data,
@@ -41,6 +44,16 @@ export default function Venue({
         nextSongBid,
         setNextSongBid,
     ] = useState(10);
+
+    const [
+        maintainVote,
+        setMaintainVote,
+    ] = useState(false);
+
+    const [
+        voteCounter,
+        setVoteCounter,
+    ] = useState(VOTE_TIMEOUT);
 
 
     const voteVolume = async () => {
@@ -81,6 +94,28 @@ export default function Venue({
         disabledVolumeVote,
     ]);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!mounted.current) {
+                return;
+            }
+
+            if (voteCounter === 1) {
+                setVoteCounter(VOTE_TIMEOUT);
+                setDisabledVolumeVote(false);
+                return;
+            }
+
+            setVoteCounter(voteCounter - 1);
+        }, 1_000);
+
+        return () => {
+            clearInterval(interval);
+        }
+    }, [
+        voteCounter,
+    ]);
+
 
     return (
         <div
@@ -98,6 +133,10 @@ export default function Venue({
 
 
             <div>
+                <div>
+                    next vote in {voteCounter}s
+                </div>
+
                 <VoteBar
                     userValue={volumeValueUser}
                     setUserValue={setVolumeValueUser}
@@ -119,6 +158,23 @@ export default function Venue({
                 >
                     {disabledVolumeVote ? 'Voted' : 'Vote'} Volume {volumeValueUser}%
                 </button>
+
+                <div
+                    className="w-[200px] m-auto my-8"
+                >
+                    <Toggle
+                        text="maintain vote"
+                        value={maintainVote}
+                        toggle={() => {
+                            setMaintainVote(!maintainVote);
+                        }}
+                        tooltip={(
+                            <div>
+                                if enabled, the current vote will be maintained for all the subsequent votes
+                            </div>
+                        )}
+                    />
+                </div>
             </div>
 
 
