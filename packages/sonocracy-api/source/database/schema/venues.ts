@@ -15,7 +15,7 @@ export const venues = sqliteTable(
         createdBy: text('created_by').notNull(),
         name: text('name').notNull(),
         city: text('city').notNull(),
-        country: text('city').notNull(),
+        country: text('country').notNull(),
         currentVolume: integer('current_volume').notNull(),
     },
     (venues) => ({

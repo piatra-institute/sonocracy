@@ -4,8 +4,11 @@ import cookieParser from 'cookie-parser';
 import {
     getUser,
     logout,
-    gogoleLogin,
+    googleLogin,
     checkoutSessions,
+    venueRegister,
+    venueVoteVolume,
+    venueBidSong,
 } from './handlers';
 
 
@@ -29,8 +32,11 @@ app.all('*', (req, res, next) => {
 
 app.post('/get-user', getUser);
 app.post('/logout', logout);
-app.post('/google-login', gogoleLogin);
+app.post('/google-login', googleLogin);
 app.post('/stripe-checkout-sessions', checkoutSessions);
+app.post('/venue-register', venueRegister);
+app.post('/venue-vote-volume', venueVoteVolume);
+app.post('/venue-bid-song', venueBidSong);
 
 app.listen(port, () => {
     console.log(`Server started on ${port}`);
