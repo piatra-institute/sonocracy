@@ -28,10 +28,7 @@ export default function MapDrawer() {
     const [lng, setLng] = useState(26.393752);
     const [lat, setLat] = useState(46.916051);
     const [zoom, setZoom] = useState(15);
-    const [
-        drawData,
-        setDrawData,
-    ] = useState<any>(null);
+    const [coordinates, setCoordinates] = useState<(number[])[]>([]);
 
 
     useEffect(() => {
@@ -74,7 +71,12 @@ export default function MapDrawer() {
         function updateArea(e: any) {
             const data = draw.getAll();
             if (data.features.length > 0) {
-                setDrawData(data);
+                try {
+                    const coordinates = (data.features[0].geometry as any).coordinates[0];
+                    setCoordinates(coordinates);
+                } catch (error) {
+                    return;
+                }
             }
         }
 
@@ -88,18 +90,16 @@ export default function MapDrawer() {
         <div>
             <h1>MapDrawer</h1>
 
-            <div className='sidebar'>
+            <div className="sidebar">
                 Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
             </div>
-            <div ref={mapContainer} className='map-container' />
-
-            <div>
-                {drawData && (
-                    <pre>
-                        {JSON.stringify(drawData, null, 2)}
-                    </pre>
-                )}
-            </div>
+            <div
+                ref={mapContainer}
+                className="map-container"
+                style={{
+                    height: '300px',
+                }}
+            />
         </div>
     );
 }

@@ -5,6 +5,7 @@ import {
 
 import LinkButton from '@/components/LinkButton';
 
+import RegisterVenue from '@/containers/RegisterVenue';
 // import About from '@/containers/About';
 // import Settings from '@/containers/Settings';
 
@@ -60,7 +61,7 @@ export default function Menu() {
     const [
         view,
         setView,
-    ] = useState<'general' | 'venues' | 'about' | 'settings'>('general');
+    ] = useState<'general' | 'venues' | 'register-venue' | 'about' | 'settings'>('general');
 
 
     useEffect(() => {
@@ -107,6 +108,13 @@ export default function Menu() {
 
     let viewElement: JSX.Element | undefined;
     switch (view) {
+        case 'register-venue':
+            viewElement = (
+                <RegisterVenue
+                    back={() => setView('general')}
+                />
+            );
+            break;
         case 'about':
             // viewElement = (
             //     <About
@@ -128,6 +136,12 @@ export default function Menu() {
                         <LinkButton
                             text="venues"
                             onClick={() => setView('venues')}
+                        />
+                    </li>
+                    <li className="m-4">
+                        <LinkButton
+                            text="register venues"
+                            onClick={() => setView('register-venue')}
                         />
                     </li>
 
