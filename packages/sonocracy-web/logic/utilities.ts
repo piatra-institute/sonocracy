@@ -19,6 +19,7 @@ export const logger = (
 
 export const apiCall = async (
     path:
+        | '/get-venue'
         | '/venue-register'
         | '/venue-vote-volume'
         | '/venue-bid-song',

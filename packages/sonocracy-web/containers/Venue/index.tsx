@@ -40,6 +40,11 @@ export default function Venue({
     ] = useState(false);
 
     const [
+        currentVote,
+        setCurrentVote,
+    ] = useState(data.currentVolume);
+
+    const [
         nextSongName,
         setNextSongName,
     ] = useState('');
@@ -110,6 +115,18 @@ export default function Venue({
             if (voteCounter === 1) {
                 setVoteCounter(VOTE_TIMEOUT);
                 setDisabledVolumeVote(false);
+
+                apiCall('/get-venue', {
+                    id: data.id,
+                }).then((response) => {
+                    if (!mounted.current) {
+                        return;
+                    }
+
+                    if (response.status) {
+                        setCurrentVote(response.data.currentVolume);
+                    }
+                });
                 return;
             }
 
@@ -120,6 +137,7 @@ export default function Venue({
             clearInterval(interval);
         }
     }, [
+        data.id,
         voteCounter,
     ]);
 
@@ -147,7 +165,7 @@ export default function Venue({
                 <VoteBar
                     userValue={volumeValueUser}
                     setUserValue={setVolumeValueUser}
-                    currentVote={data.currentVolume}
+                    currentVote={currentVote}
                 />
 
                 <button
