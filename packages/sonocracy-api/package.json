@@ -10,7 +10,8 @@
         "clean": "rimraf ./build",
         "build": "pnpm clean && node ./scripts/build.js",
         "dev": "pnpm build && concurrently \"nodemon --env-file=.env ./build/index.js\" \"node ./scripts/watch.js\"",
-        "start": "node ./build/index.js"
+        "start": "node ./build/index.js",
+        "db.push": "node database.js"
     },
     "dependencies": {
         "@libsql/client": "0.4.0-pre.7",
