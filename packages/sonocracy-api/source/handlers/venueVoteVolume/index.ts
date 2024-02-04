@@ -3,6 +3,11 @@ import type {
     Response,
 } from 'express';
 
+import {
+    eq,
+    and,
+} from 'drizzle-orm';
+
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -26,14 +31,35 @@ export default async function handler(
             maintainVote,
         } = request.body;
 
-        await database.insert(volumeVotes).values({
-            id: uuid(),
-            createdAt: new Date().toISOString(),
-            createdBy: 'user',
-            venueID,
-            vote: volume,
-            maintainVote,
-        });
+        const currentUser = 'user';
+
+
+        const query = await database.select().from(volumeVotes).where(
+            and(
+                eq(volumeVotes.createdBy, currentUser),
+                eq(volumeVotes.venueID, venueID),
+            ),
+        );
+        const existingVote = query[0];
+        if (existingVote) {
+            await database.update(volumeVotes).set({
+                createdAt: new Date().toISOString(),
+                vote: volume,
+                maintainVote,
+            }).where(
+                eq(volumeVotes.id, existingVote.id),
+            );
+        } else {
+            await database.insert(volumeVotes).values({
+                id: uuid(),
+                createdAt: new Date().toISOString(),
+                createdBy: currentUser,
+                venueID,
+                vote: volume,
+                maintainVote,
+            });
+        }
+
 
         response.json({
             status: true,
