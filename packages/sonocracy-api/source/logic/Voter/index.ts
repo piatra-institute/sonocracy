@@ -19,10 +19,19 @@ const PAST_INTERVAL = 1145_000;
 class Voter {
     constructor() {
         setInterval(async () => {
+            this.queryVotes();
+        }, VOTE_INTERVAL);
+    }
+
+    async vote() {
+        return true;
+    }
+
+    async queryVotes() {
+        try {
             const past = (
                 new Date(Date.now() - PAST_INTERVAL)
             ).toISOString();
-
 
             const votes = await database
                 .select()
@@ -60,11 +69,9 @@ class Voter {
                     eq(volumeVotes.id, vote.id),
                 );
             }
-        }, VOTE_INTERVAL);
-    }
-
-    async vote() {
-        return true;
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 
