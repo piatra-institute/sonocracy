@@ -23,6 +23,7 @@ export default async function handler(
         const {
             venueID,
             volume,
+            maintainVote,
         } = request.body;
 
         await database.insert(volumeVotes).values({
@@ -31,6 +32,7 @@ export default async function handler(
             createdBy: 'user',
             venueID,
             vote: volume,
+            maintainVote,
         });
 
         response.json({

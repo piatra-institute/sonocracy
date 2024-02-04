@@ -14,6 +14,7 @@ export const volumeVotes = sqliteTable(
         createdBy: text('created_by').notNull(),
         venueID: text('venue_id').notNull(),
         vote: integer('vote').notNull(),
+        maintainVote: integer('maintain_vote', { mode: 'boolean' }).notNull().default(false),
     },
     (volumeVotes) => ({
     }),
