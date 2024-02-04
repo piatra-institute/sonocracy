@@ -65,6 +65,16 @@ class Voter {
 
 
             for (const vote of votes) {
+                if (vote.maintainVote) {
+                    await database.update(volumeVotes).set({
+                        createdAt: new Date().toISOString(),
+                    }).where(
+                        eq(volumeVotes.id, vote.id),
+                    );
+
+                    continue;
+                }
+
                 await database.delete(volumeVotes).where(
                     eq(volumeVotes.id, vote.id),
                 );
