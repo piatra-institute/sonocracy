@@ -140,7 +140,7 @@ export default function Menu() {
                     </li>
                     <li className="m-4">
                         <LinkButton
-                            text="register venues"
+                            text="register venue"
                             onClick={() => setView('register-venue')}
                         />
                     </li>

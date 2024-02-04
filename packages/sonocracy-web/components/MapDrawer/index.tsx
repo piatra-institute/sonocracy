@@ -107,9 +107,13 @@ export default function MapDrawer({
 
     return (
         <div>
+            <p>
+                draw a polygon over the area you want to register as a venue
+            </p>
+
             <div
                 ref={mapContainer}
-                className="map-container"
+                className="map-container my-4"
                 style={{
                     height: '300px',
                     width: '500px',
