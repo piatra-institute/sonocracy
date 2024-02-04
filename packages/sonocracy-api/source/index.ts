@@ -6,6 +6,7 @@ import {
     logout,
     googleLogin,
     checkoutSessions,
+    getVenues,
     venueRegister,
     venueVoteVolume,
     venueBidSong,
@@ -34,6 +35,7 @@ app.post('/get-user', getUser);
 app.post('/logout', logout);
 app.post('/google-login', googleLogin);
 app.post('/stripe-checkout-sessions', checkoutSessions);
+app.post('/get-venues', getVenues);
 app.post('/venue-register', venueRegister);
 app.post('/venue-vote-volume', venueVoteVolume);
 app.post('/venue-bid-song', venueBidSong);

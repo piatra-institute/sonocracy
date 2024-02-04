@@ -32,38 +32,45 @@ export default async function handler(
         const {
             name,
             coordinates,
+            bidStart,
         } = request.body;
+
+        const currentUser = 'user';
 
         const {
             square,
             metadata,
         } = await parseVenueLocation(coordinates);
 
-        await database.insert(venues).values({
-            id: uuid(),
-            name,
-            createdAt: Date.now() + '',
-            createdBy: 'user',
-            ...metadata,
-            currentVolume: 0,
-            bidStart: 1,
-        });
-
         const minMax = mapSquareToMinMax(square);
 
-        await database.insert(venueLocationIndex).values({
-            id: 0,
+        const venueLocationIndexResult = await database.insert(venueLocationIndex).values({
             minX: minMax.minX,
             maxX: minMax.maxX,
             minY: minMax.minY,
             maxY: minMax.maxY,
         });
+        const locationIndexID = Number(venueLocationIndexResult.lastInsertRowid);
+        if (!locationIndexID) {
+            response.status(500).json({
+                status: false,
+            });
+            return;
+        }
+
+        await database.insert(venues).values({
+            id: uuid(),
+            name,
+            createdAt: Date.now() + '',
+            createdBy: currentUser,
+            ...metadata,
+            currentVolume: 0,
+            bidStart: parseFloat(bidStart) || 1,
+            locationIndexID,
+        });
 
         response.json({
             status: true,
-            data: {
-
-            },
         });
     } catch (error) {
         logger('error', error);

@@ -22,6 +22,7 @@ export const venues = sqliteTable(
         country: text('country').notNull(),
         currentVolume: integer('current_volume').notNull(),
         bidStart: real('bid_start').notNull(),
+        locationIndexID: integer('location_index_id').notNull(),
     },
     (venues) => ({
         nameIdx: index('nameIdx').on(venues.name),
