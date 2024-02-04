@@ -4,6 +4,7 @@ import { createClient } from '@libsql/client';
 import * as schemaUsers from './schema/users';
 import * as schemaVenues from './schema/venues';
 import * as schemaVenuesLocations from './schema/venuesLocations';
+import * as schemaVolumeVotes from './schema/volumeVotes';
 
 
 
@@ -17,6 +18,7 @@ const database = drizzle(client, {
         ...schemaUsers,
         ...schemaVenues,
         ...schemaVenuesLocations,
+        ...schemaVolumeVotes,
     },
 });
 

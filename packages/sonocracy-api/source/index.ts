@@ -12,6 +12,8 @@ import {
     venueBidSong,
 } from './handlers';
 
+import voter from './logic/Voter';
+
 
 
 const port = process.env.PORT || 8080;
@@ -43,3 +45,6 @@ app.post('/venue-bid-song', venueBidSong);
 app.listen(port, () => {
     console.log(`Server started on ${port}`);
 });
+
+
+voter.vote();
