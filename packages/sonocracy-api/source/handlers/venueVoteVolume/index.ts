@@ -34,13 +34,12 @@ export default async function handler(
         const currentUser = 'user';
 
 
-        const query = await database.select().from(volumeVotes).where(
-            and(
+        const existingVote = await database.query.volumeVotes.findFirst({
+            where: and(
                 eq(volumeVotes.createdBy, currentUser),
                 eq(volumeVotes.venueID, venueID),
             ),
-        );
-        const existingVote = query[0];
+        });
         if (existingVote) {
             await database.update(volumeVotes).set({
                 createdAt: new Date().toISOString(),

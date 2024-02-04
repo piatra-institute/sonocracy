@@ -7,6 +7,7 @@ import {
     googleLogin,
     checkoutSessions,
     getVenues,
+    getVenue,
     venueRegister,
     venueVoteVolume,
     venueBidSong,
@@ -38,6 +39,7 @@ app.post('/logout', logout);
 app.post('/google-login', googleLogin);
 app.post('/stripe-checkout-sessions', checkoutSessions);
 app.post('/get-venues', getVenues);
+app.post('/get-venue', getVenue);
 app.post('/venue-register', venueRegister);
 app.post('/venue-vote-volume', venueVoteVolume);
 app.post('/venue-bid-song', venueBidSong);
