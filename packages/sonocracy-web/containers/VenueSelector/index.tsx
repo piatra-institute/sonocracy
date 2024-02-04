@@ -6,7 +6,6 @@ import LookForVenues from '@/components/LookForVenues';
 
 
 
-
 export default function VenueSelector({
     venues,
     setSelectedVenue,

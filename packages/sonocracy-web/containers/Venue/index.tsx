@@ -6,14 +6,14 @@ import {
 
 import {
     SonocracyVenue,
+
+    VOTE_TIMEOUT,
 } from '@/data';
 
 import VoteBar from '@/components/VoteBar';
 import Toggle from '@/components/Toggle';
 
 
-
-const VOTE_TIMEOUT = 40; // seconds
 
 export default function Venue({
     data,
