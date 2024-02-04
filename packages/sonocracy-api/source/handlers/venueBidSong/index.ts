@@ -29,7 +29,7 @@ export default async function handler(
 
         await database.insert(songBids).values({
             id: uuid(),
-            createdAt: Date.now() + '',
+            createdAt: new Date().toISOString(),
             createdBy: 'user',
             venueID,
             song,

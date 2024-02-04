@@ -28,7 +28,7 @@ export default async function handler(
 
         await database.insert(volumeVotes).values({
             id: uuid(),
-            createdAt: Date.now() + '',
+            createdAt: new Date().toISOString(),
             createdBy: 'user',
             venueID,
             vote: volume,

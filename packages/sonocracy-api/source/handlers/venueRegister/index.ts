@@ -61,7 +61,7 @@ export default async function handler(
         await database.insert(venues).values({
             id: uuid(),
             name,
-            createdAt: Date.now() + '',
+            createdAt: new Date().toISOString(),
             createdBy: currentUser,
             ...metadata,
             currentVolume: 0,
