@@ -46,6 +46,7 @@ export default async function handler(
             createdBy: 'user',
             ...metadata,
             currentVolume: 0,
+            bidStart: 1,
         });
 
         const minMax = mapSquareToMinMax(square);

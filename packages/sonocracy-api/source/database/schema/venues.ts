@@ -3,6 +3,7 @@ import {
     text,
     index,
     integer,
+    real,
 } from 'drizzle-orm/sqlite-core';
 
 
@@ -20,6 +21,7 @@ export const venues = sqliteTable(
         region: text('region').notNull(),
         country: text('country').notNull(),
         currentVolume: integer('current_volume').notNull(),
+        bidStart: real('bid_start').notNull(),
     },
     (venues) => ({
         nameIdx: index('nameIdx').on(venues.name),
