@@ -10,6 +10,10 @@ import {
     VOTE_TIMEOUT,
 } from '@/data';
 
+import {
+    apiCall,
+} from '@/logic/utilities';
+
 import VoteBar from '@/components/VoteBar';
 import Toggle from '@/components/Toggle';
 
@@ -57,15 +61,18 @@ export default function Venue({
 
 
     const voteVolume = async () => {
-        fetch('/api/venue_vote_volume', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                venueID: data.id,
-                volume: volumeValueUser,
-            }),
+        await apiCall('/venue-vote-volume', {
+            venueID: data.id,
+            volume: volumeValueUser,
+            maintainVote,
+        });
+    }
+
+    const bidSong = async () => {
+        await apiCall('/venue-bid-song', {
+            venueID: data.id,
+            songName: nextSongName,
+            bid: nextSongBid,
         });
     }
 
@@ -199,6 +206,7 @@ export default function Venue({
                     `}
                     disabled={nextSongName.length === 0}
                     onClick={() => {
+                        bidSong();
                     }}
                 >
                     Bid ${nextSongBid}

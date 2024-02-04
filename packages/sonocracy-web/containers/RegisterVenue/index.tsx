@@ -3,8 +3,8 @@ import {
 } from 'react';
 
 import {
-    ENVIRONMENT,
-} from '@/data';
+    apiCall,
+} from '@/logic/utilities';
 
 import MapDrawer from '@/components/MapDrawer';
 
@@ -33,15 +33,9 @@ export default function RegisterVenue({
             return;
         }
 
-        await fetch (ENVIRONMENT.API_DOMAIN + '/venue-register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: venueName,
-                coordinates,
-            }),
+        await apiCall('/venue-register', {
+            name: venueName,
+            coordinates,
         });
     }
 
