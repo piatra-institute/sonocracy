@@ -17,10 +17,17 @@ import Splashscreen from '@/containers/Splashscreen';
 import VenueSelector from '@/containers/VenueSelector';
 import Venue from '@/containers/Venue';
 
+import useStore from '@/store';
+
 
 
 export default function App() {
     const mounted = useRef(false);
+
+
+    const {
+        setLocation,
+    } = useStore();
 
 
     const [
@@ -88,6 +95,11 @@ export default function App() {
         }
 
         try {
+            setLocation(
+                position.coords.latitude,
+                position.coords.longitude,
+            );
+
             const request = await fetch('/api/venues', {
                 method: 'POST',
                 headers: {
@@ -123,6 +135,7 @@ export default function App() {
         }
     }, [
         getLocation,
+        setLocation,
     ]);
 
 

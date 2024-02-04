@@ -10,12 +10,14 @@ import {
 // @ts-ignore
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 
-// // HACK: type mismatch
-// // @ts-ignore
-// import turfArea from '!@turf/area';
-
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+
+import {
+    ENVIRONMENT,
+} from '@/data';
+
+import useStore from '@/store';
 
 
 
@@ -25,10 +27,32 @@ mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 export default function MapDrawer() {
     const mapContainer = useRef(null);
     const map = useRef<any>(null);
-    const [lng, setLng] = useState(26.393752);
-    const [lat, setLat] = useState(46.916051);
+
+
+    const {
+        location,
+    } = useStore();
+
+    const [lat, setLat] = useState(location.latitude);
+    const [lng, setLng] = useState(location.longitude);
     const [zoom, setZoom] = useState(15);
     const [coordinates, setCoordinates] = useState<(number[])[]>([]);
+
+
+    const registerVenue = async () => {
+        console.log('registerVenue', coordinates);
+
+        await fetch (ENVIRONMENT.API_DOMAIN + '/venue-register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: 'Venue',
+                coordinates,
+            }),
+        });
+    }
 
 
     useEffect(() => {
@@ -68,7 +92,7 @@ export default function MapDrawer() {
         });
         map.current.addControl(draw);
 
-        function updateArea(e: any) {
+        function updateArea(_event: any) {
             const data = draw.getAll();
             if (data.features.length > 0) {
                 try {
@@ -80,10 +104,21 @@ export default function MapDrawer() {
             }
         }
 
+        function clearArea() {
+            setCoordinates([]);
+        }
+
         map.current.on('draw.create', updateArea);
-        map.current.on('draw.delete', updateArea);
         map.current.on('draw.update', updateArea);
+        map.current.on('draw.delete', clearArea);
     });
+
+    useEffect(() => {
+        setLat(location.latitude);
+        setLng(location.longitude);
+    }, [
+        location,
+    ]);
 
 
     return (
@@ -100,6 +135,14 @@ export default function MapDrawer() {
                     height: '300px',
                 }}
             />
+
+            <button
+                onClick={() => {
+                    registerVenue();
+                }}
+            >
+                register
+            </button>
         </div>
     );
 }
