@@ -42,7 +42,8 @@ const tables = [
     region TEXT NOT NULL,
     country TEXT NOT NULL,
     current_volume INTEGER NOT NULL,
-    bid_start REAL NOT NULL
+    bid_start REAL NOT NULL,
+    location_index_id INTEGER NOT NULL
 );`,
 `CREATE INDEX IF NOT EXISTS nameIdx ON venues (name);`,
 
