@@ -36,7 +36,10 @@ const tables = [
     created_at TEXT NOT NULL,
     created_by TEXT NOT NULL,
     name TEXT NOT NULL,
+    address TEXT NOT NULL,
+    postal_code TEXT NOT NULL,
     city TEXT NOT NULL,
+    region TEXT NOT NULL,
     country TEXT NOT NULL,
     current_volume INTEGER NOT NULL
 );`,
