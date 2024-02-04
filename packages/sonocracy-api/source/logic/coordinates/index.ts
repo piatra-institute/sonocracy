@@ -26,7 +26,7 @@ export function haversineDistance(
 }
 
 
-export function calculateSquareCoordinates(
+export function findSquareCoordinates(
     center: Coordinate,
     sideLength: number = 30,
 ) {
@@ -41,4 +41,139 @@ export function calculateSquareCoordinates(
     const lowerRight = { latitude: center.latitude - latOffset, longitude: center.longitude + lonOffset };
 
     return { upperLeft, upperRight, lowerLeft, lowerRight };
+}
+
+
+export function mapSquareToMinMax(
+    data: {
+        upperLeft: Coordinate,
+        upperRight: Coordinate,
+        lowerLeft: Coordinate,
+        lowerRight: Coordinate,
+    },
+) {
+    return {
+        minX: data.upperLeft.longitude,
+        maxX: data.upperRight.longitude,
+        minY: data.lowerLeft.latitude,
+        maxY: data.upperLeft.latitude,
+    };
+}
+
+
+/**
+ * ```
+ * [ [longitude, latitude] ]
+ * ```
+ *
+ * @param coordinates
+ * @returns
+ */
+export const findCentroid = (
+    coordinates: (number[])[],
+) => {
+    const latitudes = coordinates.reduce((acc, coord) => acc + coord[1], 0);
+    const longitudes = coordinates.reduce((acc, coord) => acc + coord[0], 0);
+
+    const latitude = latitudes / coordinates.length;
+    const longitude = longitudes / coordinates.length;
+
+    return {
+        latitude,
+        longitude,
+    };
+}
+
+
+/**
+ * ```
+ * [ [longitude, latitude] ]
+ * ```
+ *
+ * @param coordinates
+ * @returns
+ */
+export function findLongestEdge(
+    coords: (number[])[],
+) {
+    let longestEdge = 0;
+    let longestEdgeIndex = -1;
+
+    for (let i = 0; i < coords.length - 1; i++) {
+        const edgeLength = haversineDistance(
+            {
+                latitude: coords[i][1],
+                longitude: coords[i][0],
+            },
+            {
+                latitude: coords[i + 1][1],
+                longitude: coords[i + 1][0],
+            }
+        );
+
+        if (edgeLength > longestEdge) {
+            longestEdge = edgeLength;
+            longestEdgeIndex = i;
+        }
+    }
+
+    return {
+        index: longestEdgeIndex,
+        length: longestEdge,
+    };
+}
+
+
+export const reverseGeocoding = async (
+    latitude: number,
+    longitude: number,
+) => {
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${process.env.MAPBOX_API_KEY}`;
+
+    const request = await fetch(url);
+    const data: any = await request.json();
+    const [
+        addressData,
+        postcodeData,
+        placeData,
+        regionData,
+        countryData,
+    ] = data.features;
+
+    const address = addressData.text + ' ' + addressData.address;
+    const postalCode = postcodeData.text;
+    const city = placeData.text;
+    const region = regionData.text;
+    const country = countryData.text;
+
+    return {
+        address,
+        postalCode,
+        city,
+        region,
+        country,
+    };
+}
+
+
+/**
+ * ```
+ * [ [longitude, latitude] ]
+ * ```
+ *
+ * @param coordinates
+ * @returns
+ */
+export const parseVenueLocation = async (
+    coordinates: (number[])[],
+) => {
+    const centroid = findCentroid(coordinates);
+    const longestEdge = findLongestEdge(coordinates);
+    const square = findSquareCoordinates(centroid, longestEdge.length);
+    const metadata = await reverseGeocoding(centroid.latitude, centroid.longitude);
+
+    return {
+        metadata,
+        square,
+    };
 }

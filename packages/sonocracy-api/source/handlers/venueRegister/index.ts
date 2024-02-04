@@ -5,10 +5,6 @@ import type {
 
 import { v4 as uuid } from 'uuid';
 
-import {
-    logger,
-} from '../../utilities';
-
 import database from '../../database';
 import {
     venues,
@@ -17,23 +13,16 @@ import {
     venueLocationIndex,
 } from '../../database/schema/venuesLocations';
 
+import {
+    parseVenueLocation,
+    mapSquareToMinMax,
+} from '../../logic/coordinates';
+
+import {
+    logger,
+} from '../../utilities';
 
 
-const parseLocation = (
-    boundary: any,
-) => {
-
-    return {
-        country: '',
-        city: '',
-        square: {
-            maxX: 0,
-            maxY: 0,
-            minX: 0,
-            minY: 0,
-        },
-    };
-}
 
 export default async function handler(
     request: Request,
@@ -42,32 +31,31 @@ export default async function handler(
     try {
         const {
             name,
-            boundary,
+            coordinates,
         } = request.body;
 
         const {
-            country,
-            city,
             square,
-        } = parseLocation(boundary);
-
+            metadata,
+        } = await parseVenueLocation(coordinates);
 
         await database.insert(venues).values({
             id: uuid(),
             name,
             createdAt: Date.now() + '',
             createdBy: 'user',
-            country,
-            city,
+            ...metadata,
             currentVolume: 0,
         });
 
+        const minMax = mapSquareToMinMax(square);
+
         await database.insert(venueLocationIndex).values({
             id: 0,
-            minX: square.minX,
-            maxX: square.maxX,
-            minY: square.minY,
-            maxY: square.maxY,
+            minX: minMax.minX,
+            maxX: minMax.maxX,
+            minY: minMax.minY,
+            maxY: minMax.maxY,
         });
 
         response.json({
