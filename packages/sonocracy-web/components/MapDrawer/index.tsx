@@ -13,10 +13,6 @@ import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-load
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 
-import {
-    ENVIRONMENT,
-} from '@/data';
-
 import useStore from '@/store';
 
 
@@ -24,7 +20,11 @@ import useStore from '@/store';
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
 
-export default function MapDrawer() {
+export default function MapDrawer({
+    registerVenue,
+} : {
+    registerVenue: (coordinates: number[][]) => void;
+}) {
     const mapContainer = useRef(null);
     const map = useRef<any>(null);
 
@@ -35,24 +35,8 @@ export default function MapDrawer() {
 
     const [lat, setLat] = useState(location.latitude);
     const [lng, setLng] = useState(location.longitude);
-    const [zoom, setZoom] = useState(15);
+    const [zoom, setZoom] = useState(17);
     const [coordinates, setCoordinates] = useState<(number[])[]>([]);
-
-
-    const registerVenue = async () => {
-        console.log('registerVenue', coordinates);
-
-        await fetch (ENVIRONMENT.API_DOMAIN + '/venue-register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: 'Venue',
-                coordinates,
-            }),
-        });
-    }
 
 
     useEffect(() => {
@@ -123,26 +107,33 @@ export default function MapDrawer() {
 
     return (
         <div>
-            <h1>MapDrawer</h1>
-
-            <div className="sidebar">
-                Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-            </div>
             <div
                 ref={mapContainer}
                 className="map-container"
                 style={{
                     height: '300px',
+                    width: '500px',
                 }}
             />
 
-            <button
-                onClick={() => {
-                    registerVenue();
-                }}
-            >
-                register
-            </button>
+            {coordinates.length > 0 ? (
+                <button
+                    className="h-[50px] font-bold"
+                    onClick={() => {
+                        if (coordinates.length === 0) {
+                            return;
+                        }
+
+                        registerVenue(coordinates);
+                    }}
+                >
+                    Register Venue
+                </button>
+            ) : (
+                <div
+                    className="h-[50px]"
+                />
+            )}
         </div>
     );
 }
