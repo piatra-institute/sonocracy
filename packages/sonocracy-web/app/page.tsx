@@ -9,6 +9,8 @@ import {
 
 import {
     SonocracyVenue,
+
+    ENVIRONMENT,
 } from '@/data';
 
 import Menu from '@/components/Menu';
@@ -100,7 +102,7 @@ export default function App() {
                 position.coords.longitude,
             );
 
-            const request = await fetch('/api/venues', {
+            const request = await fetch(ENVIRONMENT.API_DOMAIN + '/get-venues', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
