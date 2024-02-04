@@ -51,6 +51,7 @@ const tables = [
     id TEXT PRIMARY KEY NOT NULL,
     created_at TEXT NOT NULL,
     created_by TEXT NOT NULL,
+    venue_id TEXT NOT NULL,
     vote INTEGER NOT NULL
 );`,
 
@@ -58,6 +59,7 @@ const tables = [
     id TEXT PRIMARY KEY NOT NULL,
     created_at TEXT NOT NULL,
     created_by TEXT NOT NULL,
+    venue_id TEXT NOT NULL,
     song TEXT NOT NULL,
     value REAL NOT NULL
 );`,
