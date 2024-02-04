@@ -13,7 +13,7 @@ import {
 
 
 
-const VOTE_INTERVAL = 5_000;
+const VOTE_INTERVAL = 45_000;
 const PAST_INTERVAL = 1145_000;
 
 class Voter {
