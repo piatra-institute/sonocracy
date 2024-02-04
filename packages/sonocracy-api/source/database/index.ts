@@ -5,6 +5,7 @@ import * as schemaUsers from './schema/users';
 import * as schemaVenues from './schema/venues';
 import * as schemaVenuesLocations from './schema/venuesLocations';
 import * as schemaVolumeVotes from './schema/volumeVotes';
+import * as songBids from './schema/songBids';
 
 
 
@@ -19,6 +20,7 @@ const database = drizzle(client, {
         ...schemaVenues,
         ...schemaVenuesLocations,
         ...schemaVolumeVotes,
+        ...songBids,
     },
 });
 

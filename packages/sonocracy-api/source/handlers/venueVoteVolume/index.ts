@@ -3,10 +3,16 @@ import type {
     Response,
 } from 'express';
 
+import { v4 as uuid } from 'uuid';
+
 import {
     logger,
 } from '../../utilities';
 
+import database from '../../database';
+import {
+    volumeVotes,
+} from '../../database/schema/volumeVotes';
 
 
 export default async function handler(
@@ -19,12 +25,16 @@ export default async function handler(
             volume,
         } = request.body;
 
+        await database.insert(volumeVotes).values({
+            id: uuid(),
+            createdAt: Date.now() + '',
+            createdBy: 'user',
+            venueID,
+            vote: volume,
+        });
 
         response.json({
             status: true,
-            data: {
-
-            },
         });
     } catch (error) {
         logger('error', error);

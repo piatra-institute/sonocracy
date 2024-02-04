@@ -3,9 +3,16 @@ import type {
     Response,
 } from 'express';
 
+import { v4 as uuid } from 'uuid';
+
 import {
     logger,
 } from '../../utilities';
+
+import database from '../../database';
+import {
+    songBids,
+} from '../../database/schema/songBids';
 
 
 
@@ -20,11 +27,17 @@ export default async function handler(
             bid,
         } = request.body;
 
+        await database.insert(songBids).values({
+            id: uuid(),
+            createdAt: Date.now() + '',
+            createdBy: 'user',
+            venueID,
+            song,
+            value: bid,
+        });
+
         response.json({
             status: true,
-            data: {
-
-            },
         });
     } catch (error) {
         logger('error', error);

@@ -13,6 +13,7 @@ export const songBids = sqliteTable(
         id: text('id').notNull().primaryKey(),
         createdAt: text('created_at').notNull(),
         createdBy: text('created_by').notNull(),
+        venueID: text('venue_id').notNull(),
         song: text('song').notNull(),
         value: real('value').notNull(),
     },

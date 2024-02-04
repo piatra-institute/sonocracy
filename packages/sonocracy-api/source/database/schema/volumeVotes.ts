@@ -12,6 +12,7 @@ export const volumeVotes = sqliteTable(
         id: text('id').notNull().primaryKey(),
         createdAt: text('created_at').notNull(),
         createdBy: text('created_by').notNull(),
+        venueID: text('venue_id').notNull(),
         vote: integer('vote').notNull(),
     },
     (volumeVotes) => ({
