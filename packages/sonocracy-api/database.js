@@ -52,7 +52,8 @@ const tables = [
     created_at TEXT NOT NULL,
     created_by TEXT NOT NULL,
     venue_id TEXT NOT NULL,
-    vote INTEGER NOT NULL
+    vote INTEGER NOT NULL,
+    maintain_vote INTEGER NOT NULL DEFAULT 0
 );`,
 
 `CREATE TABLE IF NOT EXISTS song_bids (
