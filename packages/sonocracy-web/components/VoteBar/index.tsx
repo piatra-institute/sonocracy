@@ -12,11 +12,13 @@ import Draggable, {
 export default function VoteBar({
     userValue,
     currentVote,
+    disabled,
     setUserValue,
 } : {
-    userValue: number,
-    currentVote: number | undefined,
-    setUserValue: React.Dispatch<React.SetStateAction<number>>,
+    userValue: number;
+    currentVote: number | undefined;
+    disabled: boolean;
+    setUserValue: React.Dispatch<React.SetStateAction<number>>;
 }) {
     const nodeRef = useRef(null);
 
@@ -45,12 +47,16 @@ export default function VoteBar({
         >
             <div
                 className={`
-                    select-none cursor-pointer
+                    select-none ${disabled ? 'pointer-events-none' : 'cursor-pointer'}
                     absolute top-0 rounded-full left-0
                     h-[40px] w-[300px] md:w-[500px]
                     bg-gradient-to-r from-orange-300 via-red-500 to-amber-900
                 `}
                 onClick={(event) => {
+                    if (disabled) {
+                        return;
+                    }
+
                     const rect = event.currentTarget.getBoundingClientRect();
                     const x = event.clientX - rect.left;
                     const percent = Math.ceil(x / rect.width * 100);
@@ -75,9 +81,17 @@ export default function VoteBar({
                 }}
                 scale={1}
                 onStop={(_event, data) => {
+                    if (disabled) {
+                        return;
+                    }
+
                     updateValue(data);
                 }}
                 onDrag={(_event, data) => {
+                    if (disabled) {
+                        return;
+                    }
+
                     updateValue(data);
                 }}
             >

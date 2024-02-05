@@ -166,6 +166,7 @@ export default function Venue({
                     userValue={volumeValueUser}
                     setUserValue={setVolumeValueUser}
                     currentVote={currentVote}
+                    disabled={disabledVolumeVote}
                 />
 
                 <button
